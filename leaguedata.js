@@ -1,8 +1,13 @@
 //'requires' may have to be converted to <script src="">?
+//CURRENTLY IN THE PROCESS OF CORRECTLY HOOKING THIS FILE UP TO THE HTML
 
 //Server has all of the functions from the LolApi (leaguejs),
 //except it is already initialized with my key.
 var server = require("./server.js");
+
+alert('nerd');
+
+
 var fs = require('fs');
 
 var region = 'na';
@@ -98,7 +103,8 @@ setChamps().then(function(result) {
                     // take in the data as parameters.
                     //The functions should be defined globally
                     // (outside of the nests).
-                    
+                    updateItemNames(apItems);
+                    alert('hello');
                     
                 }).catch(function(err) {
                     
@@ -115,3 +121,7 @@ setChamps().then(function(result) {
 }).catch(function(err) {
     
 });
+
+function updateItemNames(apItems) {
+    $('.item-container.rylais span').get(0).textContent = 'hello';//apItems[0];
+}
