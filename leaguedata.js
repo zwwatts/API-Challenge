@@ -1,6 +1,7 @@
 //'requires' may have to be converted to <script src="">?
 //CURRENTLY IN THE PROCESS OF CORRECTLY HOOKING THIS FILE UP TO THE HTML
 
+/*
 //Initialize the server for making API calls
 $.ajax({
     type: "GET",
@@ -11,6 +12,8 @@ $.ajax({
     },
     //contentType: "application/json; charset=UTF-8",
     success: function(data) {
+        alert("Does data have method data.Summoner.getByName?: " +
+              data.Summoner.hasOwnProperty("getByName"));
         data.Summoner.getByName('Foe One Flame', function(err, summonerRetrieved) {
             alert(summonerRetrieved);
         });    
@@ -19,7 +22,7 @@ $.ajax({
         alert(XMLHttpRequest.responseText);
         alert(textStatus);
     }
-});
+});*/
 
 //Server has all of the functions from the LolApi (leaguejs),
 //except it is already initialized with my key.
