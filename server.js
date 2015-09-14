@@ -1,5 +1,6 @@
 var LolApi = require('leagueapi');
 var http = require('http');
+var LolData = {};
 
 // MY KEY!! no stealerino
 LolApi.init('0b569de1-9c38-4e8b-a802-a6032910689c', 'na');
@@ -61,7 +62,7 @@ function getSummoner() {
                 reject(Error("Failed Summoner"));
             }
         });
-    })
+    });
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~End Getters~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -74,7 +75,7 @@ function send404Response(response) {
 
 //Handle request to server
 //Response should return an object with a property for each get()
-function onRequest(request, response, LolData){
+function onRequest(request, response){
     if (request.method == 'GET') {
         console.log("GET request");
         response.writeHead(200, {
@@ -83,7 +84,6 @@ function onRequest(request, response, LolData){
         });
         
         response.write(JSON.stringify(LolData));
-        console.log(JSON.stringify(LolData));
         response.end();
     }
     else {
@@ -92,11 +92,11 @@ function onRequest(request, response, LolData){
     }
 }
 
-var LolData = {};
+/*
+Nested loop to make sure all promises are fulfilled.
 
-//Nested loop to make sure all promises are fulfilled.
-//All data will be accessed at the inner-most nest.
-//Starts with the promise to set champs.
+Starts with the promise to get champs.
+*/
 getChamps().then(function(result) {
     LolData.champs = result;
     
@@ -108,7 +108,7 @@ getChamps().then(function(result) {
                              3174, 3001, 3003, 3027, 3089];
         LolData.apItems = [];
         for (var i in apItemIndexes) {
-            LolData.apItems.push(items.data[apItemIndexes[i]].name);
+            LolData.apItems.push(LolData.items.data[apItemIndexes[i]].name);
         }
         
         //Promise to set summoner
@@ -116,7 +116,11 @@ getChamps().then(function(result) {
             LolData.summoner = result;
             
             //Promise to set matches.before.ranked
+            region = 'na';
             getMatchesBeforeRanked(region).then(function(result) {
+                LolData.matches = {};
+                LolData.matches.before = {};
+                LolData.matches.after = {};
                 LolData.matches.before.ranked = result;
                 
                 //Promise to set matches.after.ranked
@@ -140,19 +144,3 @@ getChamps().then(function(result) {
 }).catch(function(err) {
     
 });
-
-var toExport = {};
-toExport.LolApi = LolApi;
-
-module.exports = toExport;
-
-
-
-/*if (summoner) {
-    console.log(summoner.id);
-    LolApi.getMatchHistory(summoner.id, 'na', function(err, history) {
-        if(!err) {
-            console.log(history);
-        }
-    });
-}*/
